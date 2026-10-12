@@ -6,6 +6,10 @@ public class AnimateHandOnInput : MonoBehaviour
     public InputActionProperty gripValue;
 
     public Animator handAnimator;
+    // Lets a forced slip show an open hand even while the controller grip remains held.
+    public bool forceOpen;
+    // Use the physical grip action to decide when the slipped hand may re-grab.
+    public bool IsGripPressed => gripValue.action != null && gripValue.action.ReadValue<float>() > 0.1f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,7 +20,8 @@ public class AnimateHandOnInput : MonoBehaviour
     void Update()
     {
         float trigger = triggerValue.action.ReadValue<float>();
-        float grip = gripValue.action.ReadValue<float>();
+        // Override only the visual animation; this does not change the controller's actual input.
+        float grip = forceOpen ? 0f : gripValue.action.ReadValue<float>();
 
         handAnimator.SetFloat("Trigger", trigger);
         handAnimator.SetFloat("Grip", grip);

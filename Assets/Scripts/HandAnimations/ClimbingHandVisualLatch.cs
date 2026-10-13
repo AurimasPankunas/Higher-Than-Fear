@@ -24,9 +24,8 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
     // Climbable currently holding this visual hand in place
     ClimbInteractable m_ClimbInteractable;
 
-    // The hand models latched pose relative to the climbables climb transform
+    // The hand's constrained grab pose relative to the climbable's climb transform.
     Vector3 m_LatchedLocalPosition;
-    Quaternion m_LatchedLocalRotation;
 
     // True while the visual hand is being held at its saved climbable pose
     bool m_IsLatched;
@@ -40,6 +39,18 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
 
     // Whether the visual is currently blending back to controller tracking.
     bool m_IsBlendingToTrackedPose;
+
+    // World-space visual displacement contributed by effects such as wind.
+    Vector3 m_VisualOffsetWorld;
+
+    /// <summary>
+    /// Sets an additive world-space offset for the rendered hand without moving its tracked interactor.
+    /// </summary>
+    /// <param name="offset">The visual displacement to apply while latched or blending after release.</param>
+    public void SetVisualOffsetWorld(Vector3 offset)
+    {
+        m_VisualOffsetWorld = offset;
+    }
 
     /// <summary>
     /// Finds the interactor if needed and saves the hand models default local pose
@@ -108,8 +119,6 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
         // The climb transform is the reference space used to keep the hand fixed to the climbable
         Transform anchor = climbInteractable.climbTransform;
         m_LatchedLocalPosition = anchor.InverseTransformPoint(m_VisualRoot.position);
-        m_LatchedLocalRotation =
-            Quaternion.Inverse(anchor.rotation) * m_VisualRoot.rotation;
 
         m_IsLatched = true;
     }
@@ -127,11 +136,21 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
                 return;
             }
 
-            // Convert the saved local pose back to world space as the climbable moves
+            // Follow controller movement along the handle while preserving grab-time height and depth.
             Transform anchor = m_ClimbInteractable.climbTransform;
+            Vector3 trackedLocalPosition =
+                anchor.InverseTransformPoint(m_Interactor.transform.position);
+            Vector3 constrainedLocalPosition = m_LatchedLocalPosition;
+            constrainedLocalPosition.x = trackedLocalPosition.x;
+
+            Transform handVisualParent = m_VisualRoot.parent;
+            Quaternion handTrackedRotation = handVisualParent != null
+                ? handVisualParent.rotation * m_OriginalLocalRotation
+                : m_OriginalLocalRotation;
+
             m_VisualRoot.SetPositionAndRotation(
-                anchor.TransformPoint(m_LatchedLocalPosition),
-                anchor.rotation * m_LatchedLocalRotation);
+                anchor.TransformPoint(constrainedLocalPosition) + m_VisualOffsetWorld,
+                handTrackedRotation);
             return;
         }
 
@@ -155,10 +174,10 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
             : m_OriginalLocalRotation;
 
         m_VisualRoot.SetPositionAndRotation(
-            Vector3.Lerp(m_ReleaseStartPosition, trackedPosition, easedProgress),
+            Vector3.Lerp(m_ReleaseStartPosition, trackedPosition + m_VisualOffsetWorld, easedProgress),
             Quaternion.Slerp(m_ReleaseStartRotation, trackedRotation, easedProgress));
 
-        if (blendProgress >= 1f)
+        if (blendProgress >= 1f && m_VisualOffsetWorld.sqrMagnitude <= 0.000001f)
             RestoreTrackedPose();
     }
 
@@ -168,7 +187,7 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
     /// <param name="args">Details of the release event, including the released interactable</param>
     void OnSelectExited(SelectExitEventArgs args)
     {
-        if (m_IsLatched && args.interactableObject == m_ClimbInteractable)
+        if (m_IsLatched && ReferenceEquals(args.interactableObject, m_ClimbInteractable))
         {
             BeginReleaseBlend();
         }
@@ -202,6 +221,7 @@ public sealed class ClimbingHandVisualLatch : MonoBehaviour
         m_IsLatched = false;
         m_IsBlendingToTrackedPose = false;
         m_ClimbInteractable = null;
+        m_VisualOffsetWorld = Vector3.zero;
 
         if (m_VisualRoot == null)
             return;

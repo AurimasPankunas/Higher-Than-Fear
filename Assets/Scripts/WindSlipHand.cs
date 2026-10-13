@@ -5,7 +5,7 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Climbing;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 /// <summary>
-/// Keeps wind-driven movement on the hand model's pivot, leaving the tracked interactor untouched.
+/// Applies wind-driven visual movement to the hand while leaving its tracked interactor untouched.
 /// </summary>
 [RequireComponent(typeof(XRDirectInteractor))]
 public class WindSlipHand : MonoBehaviour, IXRSelectFilter
@@ -14,6 +14,7 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
     [SerializeField] private WeatherManager weatherManager;
     [SerializeField] private Transform visualPivot;
     [SerializeField] private AnimateHandOnInput handAnimation;
+    [SerializeField] private ClimbingHandVisualLatch visualLatch;
 
     // Converts the weather's wind speed into visual hand-slide speed.
     [SerializeField, Min(0f)] private float windSlipMultiplier = 0.02f;
@@ -22,7 +23,7 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
     // How quickly the visual pivot returns to neutral after the hand stops holding a rung.
     [SerializeField, Min(0f)] private float returnSpeed = 0.5f;
 
-    // The XR interactor stays tracked; only visualPivot is moved by the wind.
+    // The XR interactor stays tracked; wind affects only the visual latch or visual pivot.
     private XRDirectInteractor interactor;
     private Vector3 restPivotLocalPosition;
     private ClimbInteractable heldClimbable;
@@ -45,6 +46,11 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
             handAnimation = GetComponentInChildren<AnimateHandOnInput>(true);
         }
 
+        if (visualLatch == null)
+        {
+            visualLatch = GetComponent<ClimbingHandVisualLatch>();
+        }
+
         if (visualPivot == null && handAnimation != null)
         {
             visualPivot = handAnimation.transform.parent;
@@ -55,14 +61,18 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
             weatherManager = FindAnyObjectByType<WeatherManager>();
         }
 
-        if (visualPivot == null || handAnimation == null || weatherManager == null)
+        if ((visualPivot == null && visualLatch == null) ||
+            handAnimation == null ||
+            weatherManager == null)
         {
-            Debug.LogError("WindSlipHand requires a visual pivot, hand animation, and WeatherManager.", this);
+            Debug.LogError(
+                "WindSlipHand requires a visual pivot or hand visual latch, hand animation, and WeatherManager.",
+                this);
             enabled = false;
             return;
         }
 
-        // Save the pivot's authored position so slip offsets can always be measured from its neutral pose.
+        // Save the pivot's authored position for scenes that do not use a visual latch.
         if (visualPivot != null)
         {
             restPivotLocalPosition = visualPivot.localPosition;
@@ -173,7 +183,7 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
         heldRungCollider = FindNearestRungCollider(climbInteractable);
         slideOffsetWorld = Vector3.zero;
         slipDetected = false;
-        visualPivot.localPosition = restPivotLocalPosition;
+        ApplyVisualOffset();
 
         if (heldRungCollider == null)
         {
@@ -214,9 +224,15 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
 
     private void ApplyWindSlide()
     {
-        // Do not affect hands unless the current condition is windy and a rung was identified.
-        if (weatherManager == null || weatherManager.GetCurrentWeather().name != "Windy" || heldRungCollider == null)
+        if (heldRungCollider == null)
         {
+            return;
+        }
+
+        // Smoothly remove any existing displacement if the weather changes while holding.
+        if (weatherManager == null || weatherManager.GetCurrentWeather().name != "Windy")
+        {
+            ReturnVisualToRest();
             return;
         }
 
@@ -273,12 +289,16 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
 
     private void ApplyVisualOffset()
     {
-        // Convert the world-space wind displacement into the pivot parent's local coordinates.
-        if (visualPivot != null && visualPivot.parent != null)
+        // The latch owns the final pose when present, so latched and wind poses compose.
+        if (visualLatch != null)
         {
-            // Convert the world offset into the tracked hand's local space for the visual pivot only.
-            visualPivot.localPosition = restPivotLocalPosition + visualPivot.parent.InverseTransformVector(slideOffsetWorld);
+            visualLatch.SetVisualOffsetWorld(slideOffsetWorld);
+            return;
         }
+
+        // Preserve the original pivot-based behavior for scenes without a visual latch.
+        if (visualPivot != null && visualPivot.parent != null)
+            visualPivot.localPosition = restPivotLocalPosition + visualPivot.parent.InverseTransformVector(slideOffsetWorld);
     }
 
     private void ResetVisualOffset()

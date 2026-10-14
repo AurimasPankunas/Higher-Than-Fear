@@ -36,14 +36,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Conifer_Billboard
-  m_Shader: {fileID: -6465566751694194690, guid: d4fdc026464a42041be7fe785babd90e, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _NORMALMAP
+  m_InvalidKeywords:
   - BACKFACE_NORMAL_MODE_MIRROR
   - EFFECT_BILLBOARD
   - _WINDQUALITY_FAST
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -65,12 +66,40 @@ Material:
         m_Texture: {fileID: 2800000, guid: e77eeb540c78bfd49a2429003968c75f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DetailAlbedoMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DetailNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ExtraTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 85a29d61543e03447acfbd4eb59ff7cd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MetallicGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _OcclusionMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ParallaxMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SubsurfaceTex:
@@ -105,6 +134,7 @@ Material:
     - _AlphaToMaskInspectorValue: 0
     - _Blend: 0
     - _BlendMode: 0
+    - _BumpScale: 1
     - _CanopyBaseHeight: 8
     - _Canopy_Base_Height: 0
     - _CastShadows: 1
@@ -112,7 +142,9 @@ Material:
     - _Cull: 0
     - _CullMode: 2
     - _CullModeForward: 2
+    - _Cutoff: 0.5
     - _DepthOffsetEnable: 0
+    - _DetailNormalMapScale: 1
     - _DoubleSidedEnable: 0
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 0
@@ -120,13 +152,18 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ForceForwardEmissive: 0
+    - _GlossMapScale: 1
     - _Glossiness: 0
+    - _GlossyReflections: 1
     - _HueVariationKwToggle: 1
     - _Metallic: 0
     - _Mip_Bias: 1
+    - _Mode: 0
     - _NormalMapKwToggle: 1
+    - _OcclusionStrength: 1
     - _OldHueVarBehavior: 1
     - _OpaqueCullMode: 2
+    - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RayTracing: 0
@@ -136,6 +173,8 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
+    - _SmoothnessTextureChannel: 0
+    - _SpecularHighlights: 1
     - _SphereAOCenter: 18
     - _SphereAODarken: 0
     - _SphereAORadius: 12
@@ -164,6 +203,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
+    - _UVSec: 0
     - _UseShadowThreshold: 0
     - _WINDQUALITY: 1
     - _WindQuality: 0

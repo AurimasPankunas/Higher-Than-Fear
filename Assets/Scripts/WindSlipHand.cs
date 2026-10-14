@@ -162,7 +162,7 @@ public class WindSlipHand : MonoBehaviour, IXRSelectFilter
         }
     }
 
-    private ClimbInteractable GetSelectedClimbable()
+    public ClimbInteractable GetSelectedClimbable()
     {
         // Only ladder/climb selections participate in wind slip.
         foreach (var selectedInteractable in interactor.interactablesSelected)

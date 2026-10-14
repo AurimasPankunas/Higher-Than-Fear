@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Climbing;
 using Weather = WeatherManager.Weather;
@@ -18,6 +19,18 @@ public class ReactingHandsToWeather : MonoBehaviour
     private void Awake()
     {
         climbInteractable = GetComponent<ClimbInteractable>();
+        climbInteractable.selectEntered.AddListener(OnSelectEntered);
+    }
+
+    private void OnDestroy()
+    {
+        climbInteractable.selectEntered.RemoveListener(OnSelectEntered);
+    }
+
+    private void OnSelectEntered(SelectEnterEventArgs args)
+    {
+        // Reset on every new hand grab, even if another hand still holds the ladder.
+        fallTimer = 0f;
     }
 
     private void Update()
@@ -47,7 +60,7 @@ public class ReactingHandsToWeather : MonoBehaviour
             {
                 // React to rainy weather
                 fallTimer += Time.deltaTime;
-                Debug.Log("Reacting to Rainy Weather");
+                //Debug.Log("Reacting to Rainy Weather");
                 if (fallTimer >= timeToFall)
                 {
                     Debug.Log("Player is holding the object for too long in rainy weather");

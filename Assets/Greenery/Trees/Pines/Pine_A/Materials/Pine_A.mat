@@ -30,7 +30,6 @@ Material:
   m_ValidKeywords:
   - EFFECT_BUMP
   - EFFECT_EXTRA_TEX
-  - EFFECT_HUE_VARIATION
   - EFFECT_SUBSURFACE
   - _WINDQUALITY_BEST
   m_InvalidKeywords:
@@ -112,7 +111,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _Glossiness: 0
-    - _HueVariationKwToggle: 1
+    - _HueVariationKwToggle: 0
     - _Metallic: 0
     - _Mip_Bias: 1
     - _Mip_Scale: 0
@@ -170,10 +169,10 @@ Material:
     m_Colors:
     - Diffusion_Profile_Asset: {r: 2.2888926e+38, g: 1.2389358e-26, b: 7.69327e-37, a: 0.00018220427}
     - _AO_Remap: {r: 0, g: 0.5, b: 0, a: 0}
-    - _Color: {r: 0.7686275, g: 0.7686275, b: 0.7686275, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _HueVariationColor: {r: 0.5566038, g: 0.5566038, b: 0.5566038, a: 1}
+    - _HueVariationColor: {r: 0.02669989, g: 0.2264151, b: 0.035168827, a: 1}
     - _Smoothness_Remap: {r: 0, g: 0.5, b: 0, a: 0}
     - _SubsurfaceColor: {r: 0.8584906, g: 0.81632835, b: 0.61957103, a: 1}
   m_BuildTextureStacks: []

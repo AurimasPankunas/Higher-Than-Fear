@@ -27,7 +27,6 @@ Material:
   m_ValidKeywords:
   - EFFECT_BUMP
   - EFFECT_EXTRA_TEX
-  - EFFECT_HUE_VARIATION
   - EFFECT_SUBSURFACE
   m_InvalidKeywords:
   - BACKFACE_NORMAL_MODE_MIRROR
@@ -109,7 +108,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _Glossiness: 0
-    - _HueVariationKwToggle: 1
+    - _HueVariationKwToggle: 0
     - _Metallic: 0
     - _Mip_Bias: 1
     - _Mip_Scale: 0.2

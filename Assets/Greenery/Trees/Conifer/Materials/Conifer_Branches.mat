@@ -30,7 +30,6 @@ Material:
   m_ValidKeywords:
   - EFFECT_BUMP
   - EFFECT_EXTRA_TEX
-  - EFFECT_HUE_VARIATION
   - EFFECT_SUBSURFACE
   - _WINDQUALITY_BEST
   m_InvalidKeywords:
@@ -82,7 +81,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b3110108144cfd04bb60590ac93e60d0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 80ec7e07223ddfa46b063d556e2d1d35, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -162,7 +161,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _HueVariationKwToggle: 1
+    - _HueVariationKwToggle: 0
     - _Metallic: 0
     - _Mip_Bias: 0
     - _Mode: 0
@@ -214,7 +213,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
-    - _TwoSided: 2
+    - _TwoSided: 0
     - _UVSec: 0
     - _UseShadowThreshold: 0
     - _WINDQUALITY: 3

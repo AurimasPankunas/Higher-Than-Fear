@@ -24,14 +24,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Pine_C_Billboard
-  m_Shader: {fileID: -6465566751694194690, guid: d4fdc026464a42041be7fe785babd90e, type: 3}
+  m_Shader: {fileID: 4800000, guid: 99134b1f0c27d54469a840832a28fadf, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - EFFECT_BUMP
+  - EFFECT_EXTRA_TEX
+  m_InvalidKeywords:
   - BACKFACE_NORMAL_MODE_MIRROR
-  - EFFECT_BILLBOARD
-  - _WINDQUALITY_FAST
-  m_InvalidKeywords: []
+  - _WINDQUALITY_FASTEST
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -89,6 +90,8 @@ Material:
     - _AlphaSrcBlend: 1
     - _AlphaToMask: 0
     - _AlphaToMaskInspectorValue: 0
+    - _BillboardKwToggle: 0
+    - _BillboardShadowFade: 0.5
     - _Blend: 0
     - _BlendMode: 0
     - _CanopyBaseHeight: 0
@@ -149,6 +152,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
+    - _TwoSided: 0
     - _UseShadowThreshold: 0
     - _WINDQUALITY: 1
     - _WindQuality: 1

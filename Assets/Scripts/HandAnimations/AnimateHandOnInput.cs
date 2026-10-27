@@ -23,7 +23,9 @@ public class AnimateHandOnInput : MonoBehaviour
         // Override only the visual animation; this does not change the controller's actual input.
         float grip = forceOpen ? 0f : gripValue.action.ReadValue<float>();
 
+        Debug.Log($"Trigger value: {trigger}");
         handAnimator.SetFloat("Trigger", trigger);
+        Debug.Log($"Grip value: {grip}");
         handAnimator.SetFloat("Grip", grip);
     }
 }
